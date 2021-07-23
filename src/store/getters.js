@@ -1,0 +1,2 @@
+// [store] getters
+export default {}

@@ -1,0 +1,5 @@
+<template>
+  <section>
+    <h1>Error</h1>
+  </section>
+</template>

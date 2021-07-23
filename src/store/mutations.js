@@ -1,0 +1,2 @@
+// [store] mutations
+export default {}
