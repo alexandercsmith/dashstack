@@ -26,6 +26,13 @@ export default {
   css: [
   ],
 
+  // Loading Indiciator: https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading-indicator
+  loadingIndicator: {
+    name: 'pulse',
+    color: '#f2f2f2',
+    background: '#787878'
+  },
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // Web3.js https://web3js.readthedocs.io
