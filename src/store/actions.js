@@ -1,32 +1,24 @@
 // [store] actions
 export default {
   // @func (initialize)
-  // initialize: async function ({ dispatch, error }) {
-  //   try {
-  //     await dispatch('')
-  //   } catch (e) {
-  //     error({ 
-  //       statusCode: 500, 
-  //       message: e.message 
-  //     })
-  //   }
-  // },
+  initialize: async function ({ dispatch }) {
+    try {
+      await dispatch('setChainId')
+      await dispatch('setBlock')
+      await dispatch('setAccounts')
+      await dispatch('fetchBalance')
+      await dispatch('fetchTransactionCount')
+    } catch (e) {
+      console.log('[@dashstack/actions]', 'Error: initialize', e.message)
+    }
+  },
   // @func (setAccounts)
   setAccounts: async function ({ commit }) {
-    try {
+    try {      
       await window.web3.eth.getAccounts()
         .then(accounts => commit('SET_ACCOUNTS', accounts))
     } catch (e) {
       console.log('[@dashstack/actions]', 'Error: setAccounts', e.message)
-    }
-  },
-  // @func (setBalance) 
-  setBalance: async function ({ commit, state }) {
-    try {
-      await window.web3.eth.getBalance(state.getters.account)
-        .then(balance => commit('SET_BALANCE', balance))
-    } catch (e) {
-      console.log('[@dashstack/actions]', 'Error: setBalance', e.message)
     }
   },
   // @func (setBlock)
@@ -35,7 +27,7 @@ export default {
       await window.web3.eth.getBlockNumber()
         .then(number => commit('UPDATE_BLOCK', { number, timestamp: Date.now() }))
     } catch (e) {
-      console.log('[@dashstack/actions', 'Error: setBlock', e.message)
+      console.log('[@dashstack/actions]', 'Error: setBlock', e.message)
     }
   },
   // @func (setChainId)
@@ -44,14 +36,41 @@ export default {
       await window.web3.eth.getChainId()
         .then(id => commit('SET_NETWORK', id))
     } catch (e) {
-      console.log('[@dashstack/actions', 'Error: setChainId', e.message)
+      console.log('[@dashstack/actions]', 'Error: setChainId', e.message)
+    }
+  },
+  // @func (setGasPrice)
+  setGasPrice: async function ({ }) {
+    try {
+      await window.web3.eth.getGasPrice()
+        .then(price => commit('SET_GAS_PRICE', window.web3.utils.fromWei(price)))
+    } catch (e) {
+      console.log('[@dashstack/actions]', 'Error: setGasPrice', e.message)
+    }
+  },
+  // @func (fetchBalance) 
+  fetchBalance: async function ({ commit }) {
+    try {
+      await window.web3.eth.getBalance(window.ethereum.selectedAddress)
+        .then(balance => commit('SET_BALANCE', balance))
+    } catch (e) {
+      console.log('[@dashstack/actions]', 'Error: fetchBalance', e.message)
+    }
+  },
+  // @func (fetchTransactionCount)
+  fetchTransactionCount: async function ({ commit }) {
+    try {
+      await window.web3.eth.getTransactionCount(window.ethereum.selectedAddress)
+        .then(count => commit('SET_TRANSACTION_COUNT', count));
+    } catch (e) {
+      console.log('[@dashstack/actions', 'Error: fetchTransactionCount', e.message)
     }
   },
   // @func (startBlockSubscription)
   startBlockSubscription: async function ({ commit }) {
     window.web3.eth.subscribe(id, function (err, block) {
       if (err) {
-        console.log('[@dashstack/actions', 'Error: setBlockSubscription', e.message);
+        console.log('[@dashstack/actions', 'Error: setBlockSubscription', e.message)
         return
       }
       commit('UPDATE_BLOCK', block)

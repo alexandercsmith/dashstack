@@ -6,5 +6,12 @@
 </template>
 
 <script>
-export default {}
+export default {
+  async asyncData ({ redirect }) {
+    if (window.ethereum.selectedAddress) {
+      redirect('/dashboard')
+    }
+  },
+  layout: 'landing'
+}
 </script>

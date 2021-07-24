@@ -1,9 +1,17 @@
 // [store] state
 export default () => ({
-  activeAccount: 0,
-  activeBalance: 0,
-  network:       0,
-  block:         {},
+  activeAccount: {
+    balance:      0,
+    transactions: 0,
+  },
+
+  network: {
+    id:        0,
+    block:     0,
+    gas:       0,
+    timestamp: 0
+  }, 
+
   accounts:      [],
   contracts:     [],
   subscriptions: []
