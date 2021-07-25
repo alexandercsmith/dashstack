@@ -3,11 +3,9 @@ export default {
   // @func (initialize)
   initialize: async function ({ dispatch }) {
     try {
-      await dispatch('setChainId')
-      await dispatch('setBlock')
+      await dispatch('setNetwork')
       await dispatch('setAccounts')
-      await dispatch('fetchBalance')
-      await dispatch('fetchTransactionCount')
+      await dispatch('setSelectedAccount')
     } catch (e) {
       console.log('[@dashstack/actions]', 'Error: initialize', e.message)
     }
@@ -21,49 +19,34 @@ export default {
       console.log('[@dashstack/actions]', 'Error: setAccounts', e.message)
     }
   },
-  // @func (setBlock)
-  setBlock: async function ({ commit }) {
+  // @func (setNetwork)
+  setNetwork: async function ({ commit }) {
     try {
+      // chainId
+      await window.web3.eth.getChainId()
+        .then(id => commit('SET_NETWORK_ID', id))
+      // blockNumber
       await window.web3.eth.getBlockNumber()
         .then(number => commit('UPDATE_BLOCK', { number, timestamp: Date.now() }))
-    } catch (e) {
-      console.log('[@dashstack/actions]', 'Error: setBlock', e.message)
-    }
-  },
-  // @func (setChainId)
-  setChainId: async function ({ commit }) {
-    try {
-      await window.web3.eth.getChainId()
-        .then(id => commit('SET_NETWORK', id))
-    } catch (e) {
-      console.log('[@dashstack/actions]', 'Error: setChainId', e.message)
-    }
-  },
-  // @func (setGasPrice)
-  setGasPrice: async function ({ }) {
-    try {
+      // gasPrice
       await window.web3.eth.getGasPrice()
         .then(price => commit('SET_GAS_PRICE', window.web3.utils.fromWei(price)))
     } catch (e) {
-      console.log('[@dashstack/actions]', 'Error: setGasPrice', e.message)
+      console.log('[@dashstack/actions]', 'Error: setNetwork', e.message)
     }
   },
-  // @func (fetchBalance) 
-  fetchBalance: async function ({ commit }) {
+  // @func (setSelectedAccount)
+  setSelectedAccount: async function ({ commit }) {
     try {
-      await window.web3.eth.getBalance(window.ethereum.selectedAddress)
+      const address = window.ethereum.selectedAddress 
+      // balance
+      await window.web3.eth.getBalance(address)
         .then(balance => commit('SET_BALANCE', balance))
+      // transactionCount
+      await window.web3.eth.getTransactionCount(address)
+        .then(count => commit('SET_TRANSACTION_COUNT', count))
     } catch (e) {
-      console.log('[@dashstack/actions]', 'Error: fetchBalance', e.message)
-    }
-  },
-  // @func (fetchTransactionCount)
-  fetchTransactionCount: async function ({ commit }) {
-    try {
-      await window.web3.eth.getTransactionCount(window.ethereum.selectedAddress)
-        .then(count => commit('SET_TRANSACTION_COUNT', count));
-    } catch (e) {
-      console.log('[@dashstack/actions', 'Error: fetchTransactionCount', e.message)
+      console.log('[@dashstack/actions]', 'Error: setSelectedAccount', e.message)
     }
   },
   // @func (startBlockSubscription)

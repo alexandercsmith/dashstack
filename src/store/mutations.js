@@ -16,8 +16,8 @@ export default {
   SET_GAS_PRICE: (state, price) => {
     state.network.gas = price
   },
-  // @func (SET_NETWORK)
-  SET_NETWORK: (state, id) => {
+  // @func (SET_NETWORK_ID)
+  SET_NETWORK_ID: (state, id) => {
     state.network.id = id
   },
   // @func (SET_TRANSACTION_COUNT)
